@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        birthday: {
+                            pink: '#FF6B8B',
+                            blue: '#6BB5FF',
+                            yellow: '#FFD166',
+                            purple: '#C292FF',
+                            green: '#6BFFA1',
+                            dark: '#2A2A45'
+                        }
+                    },
+                    fontFamily: {
+                        celebration: ['"Comic Sans MS"', '"Marker Felt"', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            .animate-float-delay-1 {
+                animation: float 3s ease-in-out 0.5s infinite;
+            }
+            .animate-float-delay-2 {
+                animation: float 3s ease-in-out 1s infinite;
+            }
+            .animate-float-delay-3 {
+                animation: float 3s ease-in-out 1.5s infinite;
+            }
+            .animate-spin-slow {
+                animation: spin 8s linear infinite;
+            }
+            .animate-pulse-slow {
+                animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            .animate-candle-flicker {
+                animation: candleFlicker 2s ease-in-out infinite alternate;
+            }
+            .backdrop-blur {
+                backdrop-filter: blur(8px);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        @keyframes candleFlicker {
+            0% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1.05) rotate(2deg);
+                opacity: 1;
+            }
+        }
+    </style>
+    
+    <style>
+        /* 全局样式 */
+        body {
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #fff0f5 0%, #f0f8ff 100%);
+            min-height: 100vh;
+        }
+        
+        /* 气球动画 */
+        .balloon {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: balloonRise linear infinite;
+        }
+        
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 20px;
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        @keyframes balloonRise {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0.5;
+            }
+        }
+        
+        /* 蛋糕蜡烛火焰 */
+        .flame {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background: radial-gradient(circle, #ffeb3b 0%, #ff9800 70%, rgba(255,64,129,0) 100%);
+            border-radius: 50% 50% 20% 20%;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px rgba(255,152,0,0.7);
+        }
+        
+        /* 烟花效果 */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        @keyframes fireworkExplode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(15);
+                opacity: 0;
+            }
+        }
+        
+        /* 飘带效果 */
+        .ribbon {
+            position: absolute;
+            width: 2px;
+            opacity: 0.7;
+            animation: ribbonFloat linear infinite;
+        }
+        
+        @keyframes ribbonFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="font-celebration text-birthday-dark">
+    <!-- 背景装饰元素容器 -->
+    <div id="decorations" class="fixed inset-0 z-0 pointer-events-none"></div>
+    
+    <!-- 主容器 -->
+    <div class="relative z-10 container mx-auto px-4 py-8 flex flex-col items-center justify-between min-h-screen">
+        <!-- 顶部标题 -->
+        <header class="w-full text-center mt-8 mb-4">
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold text-birthday-pink animate-pulse-slow text-shadow-lg leading-tight">
+                崔铭智小大人生日快乐！
+            </h1>
+            <p class="text-[clamp(1.2rem,4vw,1.8rem)] text-birthday-purple mt-4 animate-float">
+                愿每天充满欢乐与惊喜
+            </p>
+        </header>
+        
+        <!-- 中间内容区 -->
+        <main class="flex-grow w-full max-w-4xl flex flex-col items-center justify-center my-8">
+            <!-- 交互式蛋糕 -->
+            <div id="cake" class="relative w-[clamp(200px,70vw,500px)] h-[clamp(200px,60vw,400px)] mb-12 cursor-pointer">
+                <!-- 蛋糕底座 -->
+                <div class="absolute bottom-0 w-full h-3/5 bg-birthday-pink rounded-t-3xl border-4 border-birthday-dark overflow-hidden">
+                    <div class="absolute top-4 left-0 w-full h-4 bg-birthday-yellow rounded-full"></div>
+                    <div class="absolute top-10 left-0 w-full h-4 bg-birthday-blue rounded-full"></div>
+                    <div class="absolute top-16 left-0 w-full h-4 bg-birthday-green rounded-full"></div>
+                </div>
+                
+                <!-- 蛋糕上层 -->
+                <div class="absolute bottom-1/3 left-1/4 w-1/2 h-1/3 bg-birthday-purple rounded-t-3xl border-4 border-birthday-dark overflow-hidden">
+                    <div class="absolute top-4 left-0 w-full h-3 bg-birthday-yellow rounded-full"></div>
+                    <div class="absolute top-8 left-0 w-full h-3 bg-birthday-pink rounded-full"></div>
+                </div>
+                
+                <!-- 蜡烛 -->
+                <div id="candle1" class="absolute bottom-[80%] left-[30%] w-4 h-16 bg-birthday-yellow rounded-md border border-birthday-dark">
+                    <div class="flame animate-candle-flicker"></div>
+                </div>
+                <div id="candle2" class="absolute bottom-[85%] left-[45%] w-4 h-20 bg-birthday-blue rounded-md border border-birthday-dark">
+                    <div class="flame animate-candle-flicker"></div>
+                </div>
+                <div id="candle3" class="absolute bottom-[82%] left-[60%] w-4 h-18 bg-birthday-green rounded-md border border-birthday-dark">
+                    <div class="flame animate-candle-flicker"></div>
+                </div>
+                
+                <!-- 蛋糕装饰 -->
+                <div class="absolute bottom-[40%] left-[20%] w-6 h-6 bg-birthday-yellow rounded-full animate-float"></div>
+                <div class="absolute bottom-[45%] left-[70%] w-5 h-5 bg-birthday-blue rounded-full animate-float-delay-1"></div>
+                <div class="absolute bottom-[60%] left-[80%] w-4 h-4 bg-birthday-green rounded-full animate-float-delay-2"></div>
+                <div class="absolute bottom-[30%] left-[50%] w-5 h-5 bg-birthday-pink rounded-full animate-float-delay-3"></div>
+            </div>
+            
+            <!-- 生日祝福卡片 -->
+            <div class="w-full bg-white/80 backdrop-blur rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-birthday-pink/30 transform transition-all duration-500 hover:scale-[1.02]">
+                <div class="text-center mb-6">
+                    <i class="fa fa-gift text-4xl text-birthday-yellow animate-float"></i>
+                    <i class="fa fa-star text-4xl text-birthday-purple mx-2 animate-float-delay-1"></i>
+                    <i class="fa fa-heart text-4xl text-birthday-pink animate-float-delay-2"></i>
+                </div>
+                
+                <p class="text-[clamp(1rem,3vw,1.25rem)] leading-relaxed mb-4">
+                    在这个特别的日子里，愿所有美好的事物都围绕着你，愿你的每一个愿望都能实现，每一天都充满阳光和欢笑！
+                </p>
+                
+                <p class="text-[clamp(1rem,3vw,1.25rem)] leading-relaxed mb-6">
+                    生日快乐！愿你拥有最棒的一天，以及一整年的幸福与成功！
+                </p>
+                
+                <!-- 互动按钮 -->
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="balloonBtn" class="px-6 py-3 bg-birthday-blue text-white rounded-full text-lg shadow-lg hover:bg-birthday-blue/80 transition-all duration-300 flex items-center">
+                        <i class="fa fa-balloon mr-2"></i> 放飞气球
+                    </button>
+                    <button id="fireworkBtn" class="px-6 py-3 bg-birthday-pink text-white rounded-full text-lg shadow-lg hover:bg-birthday-pink/80 transition-all duration-300 flex items-center">
+                        <i class="fa fa-fire mr-2"></i> 放烟花
+                    </button>
+                    <button id="songBtn" class="px-6 py-3 bg-birthday-yellow text-birthday-dark rounded-full text-lg shadow-lg hover:bg-birthday-yellow/80 transition-all duration-300 flex items-center">
+                        <i class="fa fa-music mr-2"></i> 生日歌
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- 底部区域 -->
+        <footer class="w-full text-center py-6 text-gray-600">
+            <p class="text-sm md:text-base">点击蛋糕可以吹灭蜡烛哦！</p>
+            <p class="text-xs md:text-sm mt-2">祝亲爱的你生日快乐！</p>
+        </footer>
+    </div>
+    
+    <!-- 音频元素 -->
+    <audio id="birthdaySong" loop>
+        <source src="轻松愉快的氛围曲-开心活泼-祝你生日快乐（古典版）_爱给网_aigei_com.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // DOM元素
+        const cake = document.getElementById('cake');
+        const decorations = document.getElementById('decorations');
+        const balloonBtn = document.getElementById('balloonBtn');
+        const fireworkBtn = document.getElementById('fireworkBtn');
+        const songBtn = document.getElementById('songBtn');
+        const birthdaySong = document.getElementById('birthdaySong');
+        const flames = document.querySelectorAll('.flame');
+        
+        // 初始创建一些气球
+        createBalloons(10);
+        createRibbons(8);
+        
+        // 吹蜡烛功能
+        cake.addEventListener('click', () => {
+            flames.forEach(flame => {
+                flame.style.animation = 'none';
+                setTimeout(() => {
+                    flame.style.opacity = '0';
+                }, 300);
+            });
+            
+            // 吹灭蜡烛后放烟花
+            setTimeout(() => {
+                createFireworks(5);
+            }, 800);
+        });
+        
+        // 气球按钮
+        balloonBtn.addEventListener('click', () => {
+            createBalloons(15);
+            playPopSound();
+        });
+        
+        // 烟花按钮
+        fireworkBtn.addEventListener('click', () => {
+            createFireworks(8);
+        });
+        
+        // 生日歌按钮
+        songBtn.addEventListener('click', () => {
+            if (birthdaySong.paused) {
+                birthdaySong.play();
+                songBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停音乐';
+            } else {
+                birthdaySong.pause();
+                songBtn.innerHTML = '<i class="fa fa-music mr-2"></i> 生日歌';
+            }
+        });
+        
+        // 创建气球函数
+        function createBalloons(count) {
+            const colors = [
+                '#FF6B8B', '#6BB5FF', '#FFD166', 
+                '#C292FF', '#6BFFA1', '#FF9F6B'
+            ];
+            
+            for (let i = 0; i < count; i++) {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                
+                // 随机属性
+                const size = Math.random() * 40 + 30; // 30-70px
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100; // 0-100%
+                const duration = Math.random() * 30 + 30; // 30-60秒
+                const delay = Math.random() * 10; // 0-10秒延迟
+                
+                // 设置样式
+                balloon.style.width = `${size}px`;
+                balloon.style.height = `${size}px`;
+                balloon.style.backgroundColor = color;
+                balloon.style.left = `${left}%`;
+                balloon.style.animationDuration = `${duration}s`;
+                balloon.style.animationDelay = `${delay}s`;
+                
+                // 添加到容器
+                decorations.appendChild(balloon);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    balloon.remove();
+                }, (duration + delay) * 1000);
+            }
+        }
+        
+        // 创建烟花函数
+        function createFireworks(count) {
+            const colors = [
+                '#FF6B8B', '#6BB5FF', '#FFD166', 
+                '#C292FF', '#6BFFA1', '#FF9F6B', '#FFFFFF'
+            ];
+            
+            for (let i = 0; i < count; i++) {
+                // 烟花位置
+                const x = Math.random() * 100;
+                const y = Math.random() * 60 + 10; // 10-70%
+                
+                // 烟花颜色
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // 创建多个烟花粒子
+                const particleCount = Math.floor(Math.random() * 30) + 30; // 30-60个粒子
+                for (let j = 0; j < particleCount; j++) {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    
+                    // 设置样式
+                    firework.style.left = `${x}%`;
+                    firework.style.top = `${y}%`;
+                    firework.style.backgroundColor = color;
+                    firework.style.animation = `fireworkExplode ${Math.random() * 0.5 + 0.5}s forwards`;
+                    firework.style.animationDelay = `${i * 0.3}s`;
+                    
+                    decorations.appendChild(firework);
+                    
+                    // 动画结束后移除
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 1000 + i * 300);
+                }
+            }
+        }
+        
+        // 创建飘带函数
+        function createRibbons(count) {
+            const colors = [
+                '#FF6B8B', '#6BB5FF', '#FFD166', 
+                '#C292FF', '#6BFFA1', '#FF9F6B'
+            ];
+            
+            for (let i = 0; i < count; i++) {
+                const ribbon = document.createElement('div');
+                ribbon.classList.add('ribbon');
+                
+                // 随机属性
+                const length = Math.random() * 50 + 30; // 30-80px
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100; // 0-100%
+                const duration = Math.random() * 60 + 60; // 60-120秒
+                const delay = Math.random() * 20; // 0-20秒延迟
+                const rotation = Math.random() * 360; // 随机旋转角度
+                
+                // 设置样式
+                ribbon.style.height = `${length}px`;
+                ribbon.style.backgroundColor = color;
+                ribbon.style.left = `${left}%`;
+                ribbon.style.animationDuration = `${duration}s`;
+                ribbon.style.animationDelay = `${delay}s`;
+                ribbon.style.transform = `rotate(${rotation}deg)`;
+                
+                // 添加到容器
+                decorations.appendChild(ribbon);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    ribbon.remove();
+                }, (duration + delay) * 1000);
+            }
+        }
+        
+        // 播放气球爆炸声
+        function playPopSound() {
+            // 创建一个简单的音频上下文声音
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
+                oscillator.frequency.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {
+                console.log('无法播放声音:', e);
+            }
+        }
+        
+        // 自动创建更多装饰
+        setInterval(() => {
+            createBalloons(3);
+            createRibbons(2);
+        }, 8000);
+        
+        // 随机烟花效果
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createFireworks(2);
+            }
+        }, 15000);
+    </script>
+</body>
+</html>
